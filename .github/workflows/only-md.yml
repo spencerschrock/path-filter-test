@@ -1,0 +1,10 @@
+name: md changes
+on:
+  push:
+    paths-ignore:
+      - '!**.md'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: 'echo "only md files"'
