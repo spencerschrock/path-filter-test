@@ -1,0 +1,48 @@
+name: md filter test
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  docs_only_check:
+    if: github.repository_owner == 'pantsbuild'
+    name: Check for docs-only change
+    outputs:
+      docs_only: ${{ steps.docs_only_check.outputs.docs_only }}
+    runs-on:
+    - ubuntu-latest
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 2
+    - id: files
+      name: Get changed files
+      uses: tj-actions/changed-files@0626c3f94002c0a9d7491dd7fed7055bbdff6f92 #v35.1.0
+      with:
+        files_ignore: **.md
+    - id: docs_only_check
+      if: steps.files.outputs.any_changed != 'true'
+      name: Check for docs-only changes
+      run: echo "docs_only=true" >> $GITHUB_OUTPUT
+  
+  build:
+    needs:
+      - docs_only_check
+    if: (needs.docs_only_check.outputs.docs_only != 'true')
+    runs-on: ubuntu-latest
+    steps:
+      - run: 'echo "at least one non-md"'
+  
+  no-build:
+    needs:
+      - docs_only_check
+    if: (needs.docs_only_check.outputs.docs_only == 'true')
+    runs-on: ubuntu-latest
+    steps:
+      - run: 'echo "only md files"'
