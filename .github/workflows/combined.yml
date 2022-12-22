@@ -10,7 +10,6 @@ on:
 
 jobs:
   docs_only_check:
-    if: github.repository_owner == 'pantsbuild'
     name: Check for docs-only change
     outputs:
       docs_only: ${{ steps.docs_only_check.outputs.docs_only }}
