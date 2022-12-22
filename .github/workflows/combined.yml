@@ -25,7 +25,7 @@ jobs:
       name: Get changed files
       uses: tj-actions/changed-files@0626c3f94002c0a9d7491dd7fed7055bbdff6f92 #v35.1.0
       with:
-        files_ignore: **.md
+        files_ignore: '**.md'
     - id: docs_only_check
       if: steps.files.outputs.any_changed != 'true'
       name: Check for docs-only changes
